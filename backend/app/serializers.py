@@ -62,10 +62,30 @@ class CategorySerializer(serializers.ModelSerializer):
         model = Category
         fields = '__all__'
 
+
 class ChallengeSerializer(serializers.ModelSerializer):
+    category = serializers.CharField(source="category.name", read_only=True)
+
     class Meta:
         model = Challenge
-        fields = '__all__'
+        fields = "__all__"
+
+    def to_representation(self, instance):
+        request = self.context.get("request")
+        
+        # If retrieving a single challenge (challenges/{id}), return all fields
+        if request and request.parser_context["kwargs"].get("pk"):
+            return super().to_representation(instance)
+
+        # Otherwise, return limited fields for list view
+        return {
+            "id": instance.id,
+            "title": instance.title,
+            "difficulty": instance.difficulty,
+            "points": instance.points,
+            "category": instance.category.name,
+        }
+
 
 class SubmissionSerializer(serializers.ModelSerializer):
     challenge_id = serializers.IntegerField(write_only=True) 
