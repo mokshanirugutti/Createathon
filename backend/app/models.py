@@ -57,6 +57,7 @@ class UserProgress(models.Model):
                  ('completed', 'Completed')]
     )
     attempts = models.IntegerField(default=0)
+    points = models.IntegerField(default=0)
     completed_at = models.DateTimeField(null=True, blank=True)
 
 class Submission(models.Model):

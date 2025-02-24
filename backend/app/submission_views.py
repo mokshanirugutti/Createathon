@@ -42,14 +42,31 @@ class CodeExecutionViewSet(viewsets.ViewSet):  # Handles code execution
                 result=response_data
             )
 
-            # Update User Progress
-            if response_data.get("status") == "passed":
-                UserProgress.objects.update_or_create(
-                    user=user,
-                    challenge=challenge,
-                    defaults={"status": "completed", "completed_at": now()}
-                )
+            passed = response_data.get("status") == "passed"
 
-            return Response({"message": "Submission processed", "result": response_data}, status=status.HTTP_200_OK)
+            user_progress, created = UserProgress.objects.update_or_create(
+                user=user,
+                challenge=challenge,
+                defaults={
+                    "status": "completed" if passed else "started",
+                }
+            )
+            if created:
+                user_progress.attempts = 1
+            else:
+                user_progress.attempts += 1
 
+            if passed:
+                user_progress.completed_at = now()
+
+            return Response({
+                "message": "Submission processed",
+                "submission_status": response_data.get("status"),
+                # "results":response_data,
+                "user_progress": {
+                    "status": user_progress.status,
+                    "attempts": user_progress.attempts,
+                    "completed_at": user_progress.completed_at
+                }
+            }, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

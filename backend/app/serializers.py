@@ -72,7 +72,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Submission
-        fields = ['challenge_id', 'code', 'user', 'challenge', 'result', 'status', 'submitted_at']
+        fields = '__all__'
         read_only_fields = ['user', 'challenge', 'result', 'status', 'submitted_at']
 
     def validate_challenge_id(self, value):

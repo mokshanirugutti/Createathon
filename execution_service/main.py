@@ -17,8 +17,8 @@ class ExecutionRequest(BaseModel):
 def execute_code(request: ExecutionRequest):
     user_code = request.code
     test_cases = request.test_cases
-    print(f'user code = {user_code}')
-    print(f'test cases = {test_cases}')
+    # print(f'user code = {user_code}')
+    # print(f'test cases = {test_cases}')
     results = []
 
     try:
