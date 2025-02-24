@@ -31,7 +31,7 @@ class OTPService:
         send_mail(
             subject,
             message,
-            f'dictionary_app <{settings.EMAIL_HOST_USER}>',
+            f'Createathon <{settings.EMAIL_HOST_USER}>',
             [email],
             fail_silently=False,
         )
