@@ -4,21 +4,27 @@ import {
     Table,
     TableBody,
     TableCell,
-    TableFooter,
     TableHead,
     TableHeader,
     TableRow,
   } from "@/components/ui/table";
-  
+import { useNavigate } from 'react-router';
+import LoadingAnimation from '../Loading';
+import {motion }   from 'framer-motion'
 
 const ChallengesSection: React.FC = () => {
+  const navigate = useNavigate();
     const { loading, Challenges, error } = useChallenges();
 
-    if (loading) return <div>Loading...</div>;
+    if (loading) return <LoadingAnimation/>;
     if (error) return <div className="text-red-500">Error: {error}</div>;
 
     return (
-        <div>
+        <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.3 ,delay:1 }}
+        >
             <h1 className='text-3xl font-semibold border-b py-3'>Challenges</h1>
             <div>
             <Table>
@@ -33,7 +39,9 @@ const ChallengesSection: React.FC = () => {
 
         <TableBody>
           {Challenges && Challenges.map((challenge) => (
-            <TableRow key={challenge.id}>
+            <TableRow key={challenge.id}
+            onClick={() => navigate(`/challenges/${challenge.id}`)}
+            >
               <TableCell className="font-medium">{challenge.title}</TableCell>
               
               <TableCell className={`
@@ -51,7 +59,7 @@ const ChallengesSection: React.FC = () => {
 
                 
             </div>
-        </div>
+        </motion.div>
     );
 };
 

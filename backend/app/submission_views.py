@@ -5,8 +5,11 @@ from django.utils.timezone import now
 from .models import Submission, UserProgress
 from .serializers import SubmissionSerializer
 import requests
+from dotenv import load_dotenv
+import os
+load_dotenv()
 
-FASTAPI_EXECUTION_URL = "http://localhost:8001/execute"
+FASTAPI_EXECUTION_URL = os.environ.get('EXECUTION_SERVER')
 
 class CodeExecutionViewSet(viewsets.ViewSet):  # Handles code execution
     permission_classes = [IsAuthenticated]
@@ -62,7 +65,7 @@ class CodeExecutionViewSet(viewsets.ViewSet):  # Handles code execution
             return Response({
                 "message": "Submission processed",
                 "submission_status": response_data.get("status"),
-                # "results":response_data,
+                "results":response_data,
                 "user_progress": {
                     "status": user_progress.status,
                     "attempts": user_progress.attempts,

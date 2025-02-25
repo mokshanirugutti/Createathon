@@ -1,10 +1,11 @@
-from django.contrib.auth.hashers import check_password
 from rest_framework import serializers
 from django.contrib.auth.models import User
 
-from .models import Category, Challenge, Submission
+from .models import Category, Challenge, Submission, Profile
 
 
+
+# user serializer start ----------
 
 class UserCreationSerializer(serializers.Serializer):
     email = serializers.EmailField()
@@ -55,7 +56,18 @@ class VerifyPasswordResetSerializer(serializers.Serializer):
         if not User.objects.filter(email=value).exists():
             raise serializers.ValidationError("Invalid email")
         return value
+    
+class ProfileSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(source='user.username', read_only=True)
+    email = serializers.EmailField(source='user.email', read_only=True)
 
+    class Meta:
+        model = Profile
+        fields = ['username', 'email', "id"]
+
+
+
+# user serializer end ----------
 
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
@@ -64,6 +76,9 @@ class CategorySerializer(serializers.ModelSerializer):
 
 
 class ChallengeSerializer(serializers.ModelSerializer):
+    category_id = serializers.PrimaryKeyRelatedField(
+        queryset=Category.objects.all(), source="category"
+    )
     category = serializers.CharField(source="category.name", read_only=True)
 
     class Meta:

@@ -17,3 +17,20 @@ export interface Challenge {
 }
 
 export interface Challenges extends Pick<Challenge, 'id' | 'title' | 'difficulty' | 'points' | 'category'> {}
+
+
+export interface User {
+    id: string;
+    username: string;
+    email: string;
+    
+  }
+  
+  export interface UserContextType {
+    user: User | null; 
+    token: string | null;
+    register: (username: string, password: string, email: string) => Promise<void>;
+    login: (username: string, password: string) => Promise<void>; 
+    logout: () => void;
+  }
+

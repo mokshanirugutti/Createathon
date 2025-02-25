@@ -11,7 +11,7 @@ const useChallenges = () => {
     useEffect(() => {
       const getChallenges =  async () => {
         try {
-            const response = await axios.get(`${URL}/api/challenges/`)
+            const response = await axios.get(`${URL}/challenges/`)
             console.log('response data')
             console.log(response.data)
             setChallenges(response.data)

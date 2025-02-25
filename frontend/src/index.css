@@ -120,4 +120,7 @@
   body {
     @apply bg-background text-foreground;
   }
+  .pagePadding {
+    @apply px-6 sm:px-14 lg:px-28;
+  }
 }

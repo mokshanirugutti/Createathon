@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os 
 from dotenv import load_dotenv
+from datetime import timedelta
 
 load_dotenv()
 
@@ -33,9 +34,9 @@ DEBUG = os.environ.get('DJANGO_DEBUG')
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:5173",
-]
+
+CORS_ALLOWED_ORIGINS = os.getenv("CORS_ALLOWED_ORIGINS", "").split(",")
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -95,9 +96,9 @@ DATABASES = {
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST':os.environ.get('DB_HOST'), 
         'PORT': os.environ.get('DB_PORT'),
-        #   'OPTIONS': {
-        #     'sslmode': 'require',
-        # },
+          'OPTIONS': {
+            'sslmode': 'require',
+        },
     }
 }
 # Password validation
@@ -147,6 +148,15 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.SessionAuthentication',
     ],
+}
+
+
+
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=2),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=2),
+    'ROTATE_REFRESH_TOKENS': True,  
+    'BLACKLIST_AFTER_ROTATION': True,  
 }
 
 

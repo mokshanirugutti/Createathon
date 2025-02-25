@@ -26,15 +26,23 @@ def execute_code(request: ExecutionRequest):
         exec_globals = {}
         exec(user_code, exec_globals)
 
-        if "solution" not in exec_globals:
-            raise Exception("Function 'solution' not defined in user code.")
+        if "Solution" not in exec_globals:
+            raise Exception("class 'Solution' not defined in user code.")
 
-        solution_function = exec_globals["solution"]
-
+        # Instantiate the Solution class
+        solution_instance = exec_globals["Solution"]()
+        
+        
+        # Ensure the 'solve' method exists
+        if not hasattr(solution_instance, "solve"):
+            raise Exception("Method 'solve' not found in 'Solution' class.")
+        
+        solve_method = getattr(solution_instance, "solve")
+          
         for test_case in test_cases:
             try:
                 start_time = time.time()
-                output = solution_function(test_case.input)  # Call user's function
+                output = solve_method(test_case.input) # Call user's solve method
                 execution_time = time.time() - start_time
 
                 results.append({
