@@ -57,7 +57,7 @@ cd createathon
 
 ## 🛠 API Endpoints
 ### Authentication
-- `POST /api/auth/login/` - User Login
+- `POST /api/token/` - User Login
 - `POST /api/auth/register/` - User Registration
 
 ### Challenges
